@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMTELE-WEB | Panel Interactivo Mi Teleférico</title>
+    <link rel="stylesheet" href="css\estilos.css">
+</head>
+<body>
+    <header class="top-bar">
+        <div class="brand-top">
+            <span>🚠</span>
+            <span>SIMTELE-WEB</span>
+        </div>
+        <div class="timer-top">
+            Tiempo restante: <span id="relojClase">02:00:00</span>
+        </div>
+    </header>
+    <div class="app-layout">
+        <aside class="sidebar">
+            <nav>
+                <a href="#inicio" class="active">🏠 Dashboard</a>
+                <a href="#modulo1">🛑 Detención de Emergencia</a>
+                <a href="#modulo2">🔧 Mantenimiento</a>
+                <a href="#modulo3">🌬️ Viento y Oscilación</a>
+                <a href="#modulo4">📡 Sensores</a>
+            </nav>
+        </aside>
+        <main class="main-content" id="inicio">
+            <div class="dashboard-header">
+                <h1>SIMTELE-WEB: Panel interactivo de prevención y monitoreo de Mi Teleférico</h1>
+                <div class="sim-badge">
+                    Simulación educativa · Todos los umbrales son didácticos (no representan límites operativos reales)
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <section class="card" id="modulo1">
+                    <div class="card-header">Detención de Emergencia</div>
+                    <div class="card-body">
+                        <p class="help-note">Fórmula: d = (v / 3.6) × t. Umbral ficticio de alerta: 50 m.</p>
+                        <div class="row-inputs">
+                            <div class="field">
+                                <label for="velInput">Velocidad (km/h)</label>
+                                <input type="number" id="velInput" value="72" step="any">
+                            </div>
+                            <div class="field">
+                                <label for="tiempoInput">Tiempo de reacción (s)</label>
+                                <input type="number" id="tiempoInput" value="3" step="any">
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" id="btnDetencion">Calcular Distancia</button>
+                        </div>
+                        <div class="error-msg" id="errorDetencion"></div>
+                        <div class="alert-panel">
+                            <div class="alert-info">
+                                <div class="alert-icon">⚠️</div>
+                                <div class="alert-text">
+                                    <h4>Distancia de reacción:</h4>
+                                    <div class="big-value" id="distanciaValor">60 m</div>
+                                    <div class="alert-status" id="distanciaEstado" style="color: #c9302c;">🔴 Supera umbral didáctico (50 m)</div>
+                                </div>
+                            </div>
+                            <svg class="chart-mini" viewBox="0 0 110 60">
+                                <line x1="10" y1="50" x2="100" y2="50" stroke="#7c682b" stroke-width="2"/>
+                                <line x1="15" y1="10" x2="15" y2="55" stroke="#7c682b" stroke-width="2"/>
+                                <path d="M 15 15 Q 45 18 65 38 T 95 48" fill="none" stroke="#5c4912" stroke-width="2.5"/>
+                            </svg>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card" id="modulo2">
+                    <div class="card-header">Mantenimiento Activo</div>
+                    <div class="card-body">
+                        <div class="row-inputs">
+                            <div class="field">
+                                <label for="compInput">Componente</label>
+                                <input type="text" id="compInput" placeholder="Ej. Polea motriz">
+                            </div>
+                            <div class="field">
+                                <label for="horasInput">Horas de Uso</label>
+                                <input type="number" id="horasInput" placeholder="Ej. 300">
+                            </div>
+                            <div class="field">
+                                <label for="estadoInput">Estado</label>
+                                <select id="estadoInput">
+                                    <option value="normal">Normal</option>
+                                    <option value="revision">Revisión</option>
+                                    <option value="urgente">Urgente</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="error-msg" id="errorMantenimiento"></div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Componente</th>
+                                        <th>Horas de Uso</th>
+                                        <th>Estado</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaMantenimiento"></tbody>
+                            </table>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" id="btnAgregarMant">Agregar Registro</button>
+                            <button type="button" class="btn-danger" id="btnEliminarUltMant">Eliminar</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card" id="modulo3">
+                    <div class="card-header">Viento y Oscilación</div>
+                    <div class="card-body">
+                        <div class="row-inputs">
+                            <div class="field">
+                                <label for="v1">M1 (km/h)</label>
+                                <input type="number" id="v1" value="10">
+                            </div>
+                            <div class="field">
+                                <label for="v2">M2 (km/h)</label>
+                                <input type="number" id="v2" value="20">
+                            </div>
+                            <div class="field">
+                                <label for="v3">M3 (km/h)</label>
+                                <input type="number" id="v3" value="30">
+                            </div>
+                            <div class="field">
+                                <label for="v4">M4 (km/h)</label>
+                                <input type="number" id="v4" value="40">
+                            </div>
+                            <div class="field">
+                                <label for="v5">M5 (km/h)</label>
+                                <input type="number" id="v5" value="50">
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" id="btnViento">Analizar Viento</button>
+                        </div>
+                        <div class="error-msg" id="errorViento"></div>
+                        <div class="wind-chart-box">
+                            <svg viewBox="0 0 400 110">
+                                <line x1="35" y1="20" x2="380" y2="20" stroke="#e2e8f0" stroke-width="1"/>
+                                <line x1="35" y1="55" x2="380" y2="55" stroke="#e2e8f0" stroke-width="1"/>
+                                <line x1="35" y1="90" x2="380" y2="90" stroke="#94a3b8" stroke-width="1.5"/>
+                                <polygon id="areaViento" points="45,90 45,78 125,66 205,54 285,42 365,30 365,90" fill="rgba(35, 80, 105, 0.15)"/>
+                                <polyline id="lineaViento" points="45,78 125,66 205,54 285,42 365,30" fill="none" stroke="#235069" stroke-width="2.5"/>
+                                <circle id="pt1" cx="45" cy="78" r="4" fill="#235069"/>
+                                <circle id="pt2" cx="125" cy="66" r="4" fill="#235069"/>
+                                <circle id="pt3" cx="205" cy="54" r="4" fill="#235069"/>
+                                <circle id="pt4" cx="285" cy="42" r="4" fill="#235069"/>
+                                <circle id="pt5" cx="365" cy="30" r="4" fill="#235069"/>
+                                <text x="42" y="105" font-size="10" fill="#475569">1</text>
+                                <text x="122" y="105" font-size="10" fill="#475569">2</text>
+                                <text x="202" y="105" font-size="10" fill="#475569">3</text>
+                                <text x="282" y="105" font-size="10" fill="#475569">4</text>
+                                <text x="362" y="105" font-size="10" fill="#475569">5</text>
+                            </svg>
+                        </div>
+                        <div class="wind-stats">
+                            <div class="stat-box">
+                                <span>Promedio:</span>
+                                <strong id="vientoPromedio">30 km/h</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Máximo:</span>
+                                <strong id="vientoMaximo">50 km/h</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Clasificación:</span>
+                                <strong id="vientoClasificacion">Moderado</strong>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card" id="modulo4">
+                    <div class="card-header">Monitoreo de Sensores</div>
+                    <div class="card-body">
+                        <div class="row-inputs">
+                            <div class="field">
+                                <label for="sensorCodigo">ID Sensor (SEN-000)</label>
+                                <input type="text" id="sensorCodigo" placeholder="Ej. SEN-001">
+                            </div>
+                            <div class="field">
+                                <label for="sensorTipo">Tipo</label>
+                                <select id="sensorTipo">
+                                    <option value="Velocidad">Velocidad</option>
+                                    <option value="Tensión">Tensión</option>
+                                    <option value="Inclinación">Inclinación</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="sensorLectura">Lectura</label>
+                                <input type="number" id="sensorLectura" placeholder="Ej. 20">
+                            </div>
+                        </div>
+                        <div class="error-msg" id="errorSensor"></div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID Sensor</th>
+                                        <th>Tipo</th>
+                                        <th>Lectura</th>
+                                        <th>Estado</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaSensores"></tbody>
+                            </table>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" id="btnAgregarSensor">Agregar Nuevo Sensor</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    <footer>
+        Programación Web I | Desafío presencial de dos horas | SIMTELE-WEB · La Paz, Bolivia
+    </footer>
+    <script src="js\script.js"></script>
+</body>
+</html>
